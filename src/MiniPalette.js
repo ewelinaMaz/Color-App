@@ -1,10 +1,10 @@
 import React from 'react';
 import {withStyles} from '@material-ui/styles';
-//import classes from '*.module.css';
+
 
 const styles = {
     root: {
-       backgroudColor: "white",
+       backgroundColor: "white",
        border: "1px solid black",
        borderRadius: "5px",
        padding: "0.5rem",
@@ -15,7 +15,7 @@ const styles = {
        }
     },
     colors: {
-        backgroudColor: "grey"
+        backgroudColor: "#dae1e4"
     },
     title: {
         display: "flex",
@@ -33,10 +33,18 @@ const styles = {
     }
 };
 function MiniPalette(props)  {
-    const { classes, paletteName, emoji } = props;
+    const { classes, paletteName, emoji, colors } = props;
+
+    const miniColorBoxes = colors.map(color => (
+        <div
+          className={classes.miniColor}
+          style={{ backgroundColor: color.color }}
+          key={color.name}
+        />
+      ));
     return(
         <div className={classes.root}>
-            <div className={classes.colors}>
+            <div className={classes.colors}>{miniColorBoxes}
             </div>
     <h5 className={classes.title}>{paletteName}
     <span className={classes.emoji}>{emoji}</span>
