@@ -1,5 +1,6 @@
 import React from 'react';
 import {withStyles} from '@material-ui/styles';
+import { Hidden } from '@material-ui/core';
 
 
 const styles = {
@@ -15,7 +16,11 @@ const styles = {
        }
     },
     colors: {
-        backgroudColor: "#dae1e4"
+        backgroudColor: "#dae1e4",
+        height: "150px",
+        width: "100%",
+        borderRadius: "5px",
+        overflow: "hidden",
     },
     title: {
         display: "flex",
@@ -30,6 +35,14 @@ const styles = {
     emoji: {
         marginLeft: "0.5rem",
         fontSize: "1.5rem"
+    },
+    miniColor: {
+        height: "25%",
+        width: "20%",
+        display: "inline-block",
+        margin: "0 auto",
+        position: "relative",
+        marginBottom: "-3.5px"
     }
 };
 function MiniPalette(props)  {
