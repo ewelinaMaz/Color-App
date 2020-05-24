@@ -1,7 +1,5 @@
 import React from 'react';
 import {withStyles} from '@material-ui/styles';
-import { Hidden } from '@material-ui/core';
-
 
 const styles = {
     root: {

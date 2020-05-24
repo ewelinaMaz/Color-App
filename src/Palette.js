@@ -3,7 +3,6 @@ import ColorBox from './ColorBox';
 import Navbar from './Navbar';
 import './Palette.css';
 
-
 class Palette extends Component {
     constructor(props) {
         super(props);
