@@ -14,7 +14,7 @@ import { ChromePicker } from 'react-color';
 import Button from '@material-ui/core/Button';
 import DraggableColorList from './DraggableColorList';
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
-import {arrayMove} from 'react-sortable-hoc';
+import { arrayMove } from 'react-sortable-hoc';
 
 const drawerWidth = 400;
 
@@ -76,6 +76,9 @@ const styles = theme => ({
     }
 });
 class NewPaletteForm extends Component {
+    static defaultProps= {
+        maxColors: 20
+    }
     constructor(props) {
         super(props);
         this.state = {
@@ -83,7 +86,7 @@ class NewPaletteForm extends Component {
             currentColor: 'teal',
             newColorName: '',
             newPaletteName: '',
-            colors: [{ color: 'blue', name: 'blue' }]
+            colors: this.props.palettes[0].colors,
         };
         this.handleChange = this.handleChange.bind(this);
     }
@@ -148,20 +151,35 @@ class NewPaletteForm extends Component {
     }
     removeColor = (colorName) => {
         this.setState({
-          colors: this.state.colors.filter(color => 
-            color.name !== colorName)  
+            colors: this.state.colors.filter(color =>
+                color.name !== colorName)
         });
-    }
+    };
     onSortEnd = ({ oldIndex, newIndex }) => {
         this.setState(({ colors }) => ({
-          colors: arrayMove(colors, oldIndex, newIndex)
+            colors: arrayMove(colors, oldIndex, newIndex)
         }));
-      };
+    };
 
+    clearColors = () => {
+        this.setState({
+            colors: []
+        });
+    };
+
+    addRandomColor = () => {
+      const allColors = this.props.palettes.map(p => p.colors).flat();
+        const rand = Math.floor(Math.random() * allColors.length);
+         const randomColor = allColors[rand];
+         this.setState({
+             colors:[...this.state.colors, randomColor],
+         });
+    }
 
     render() {
-        const { classes } = this.props;
-        const { open, newColorName, currentColor, newPaletteName } = this.state;
+        const { classes, maxColors } = this.props;
+        const { open, newColorName, currentColor, newPaletteName, colors } = this.state;
+        const paletteIsFull = colors.length >= maxColors;
         return (
             <div className={classes.root}>
                 <CssBaseline />
@@ -222,12 +240,15 @@ class NewPaletteForm extends Component {
                     <div>
                         <Button
                             variant="contained"
-                            color="secondary">
+                            color="secondary"
+                            onClick={this.clearColors}>
                             Clear Palette
                     </Button>
                         <Button
                             variant="contained"
-                            color="primary">
+                            color="primary"
+                            onClick={this.addRandomColor}
+                            disabled = {paletteIsFull}>
                             Random Color
                     </Button>
                     </div>
@@ -252,8 +273,11 @@ class NewPaletteForm extends Component {
                             variant="contained"
                             type="submit"
                             color={'primary'}
-                            style={{ backgroundColor: currentColor }} >
-                            Add Color
+                            disabled = {paletteIsFull}
+                            style={{ backgroundColor: paletteIsFull ?
+                             'grey' :
+                              currentColor }} >
+                            {paletteIsFull ? 'Palette is Full' : 'Add color'}
                         </Button>
                     </ValidatorForm>
                 </Drawer>
@@ -263,12 +287,12 @@ class NewPaletteForm extends Component {
                     })}
                 >
                     <div className={classes.drawerHeader} />
-                   <DraggableColorList
-                   colors={this.state.colors}
-                   removeColor={this.removeColor}
-                   axis='xy'
-                   onSortEnd={this.onSortEnd}
-                   />
+                    <DraggableColorList
+                        colors={colors}
+                        removeColor={this.removeColor}
+                        axis='xy'
+                        onSortEnd={this.onSortEnd}
+                    />
                 </main>
             </div>
         );
