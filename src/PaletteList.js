@@ -30,7 +30,7 @@ class PaletteList extends Component {
   closeDialog = () => {
     this.setState({ open: false, deletingId: "" });
   };
-  goToPalette(id) {
+  goToPalette = (id) => {
     this.props.history.push(`/palette/${id}`);
   }
   handleDelete = () => {
